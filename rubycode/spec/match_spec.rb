@@ -24,6 +24,26 @@ describe Match do
     end
   end
 
+  describe "#winner" do
+    before do
+      @match.add_event(event)
+      @match.add_event(event(to_player: "Nick", weapon: "USP"))
+      @match.add_event(event(to_player: "Roman", weapon: "USP"))
+      @match.add_event(event(from_player: "Roman", to_player: "verto", weapon: "USP"))
+    end
+
+    it "should return winner of match" do
+      winner = @match.winner
+      expect(winner.name).to eq("verto")
+    end
+
+    it "should return nil if has a draw" do
+      @match.add_event(event(from_player: "Roman", to_player: "Nick", weapon: "USP"))
+      @match.add_event(event(from_player: "Roman", to_player: "verto", weapon: "AWP"))
+      expect(@match.winner).to eq(nil)
+    end
+  end
+
   def event(attrs = {})
     { match: "1", from_player: "verto", to_player: "noob", weapon: "AWP" }.merge!(attrs)
   end

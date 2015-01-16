@@ -21,6 +21,22 @@ class Match
     valid_players.sort_by { |player| player.kills }.reverse!
   end
 
+  def winner
+    rankings = player_rankings
+    first = rankings.first
+    second = rankings.size > 1 ? rankings[1] : nil
+    
+    if second
+      return first.kills > second.kills ? first : nil
+    end
+
+    first
+  end
+
+  def winner_favorite_weapon
+    winner.favorite_weapon
+  end
+
   private
 
   def find_player(name)

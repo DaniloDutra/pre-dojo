@@ -50,7 +50,7 @@ class LogParser
 
   def match_event?(line)
     m = EVENT_MATCH_REGEX.match line
-    m.nil? ? nil : { from_player: m[3], to_player: m[4], weapon: m[5], created_at: DateUtils.parse("#{m[1]} #{m[2]}") }
+    m.nil? ? nil : { from_player: m[3], to_player: m[4], weapon: m[6], created_at: DateUtils.parse("#{m[1]} #{m[2]}") }
   end
 
 end

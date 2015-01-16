@@ -2,7 +2,3 @@ Comandos para iniciar:
 $ cd rubycode
 $ bundle install
 $ ruby cli/rankings.rb
-
-Apresentei apenas o obrigatório, a idéia do dojo é excelente, 
-penso que com os objetos construídos como está na aplicação não 
-seja dificil implementar as rotinas do bônus.
