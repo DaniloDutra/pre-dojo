@@ -39,6 +39,13 @@ describe Ranking do
       expect(rank.players.last.awards).to eq(0)
     end
 
+    it "should not add awards to winner with death" do
+      add_match_event(@match, from_player: "Nick", to_player: "verto")
+      rank = Ranking.new(@match)
+      winner = rank.winner
+      expect(winner.awards).to eq(0)
+    end
+
     describe "generate awards by kills" do
       before do
         add_match_event(@match, to_player: "Nick", weapon: "AWP")
