@@ -40,7 +40,7 @@ class Ranking
 
   def generate_awards
     winner_player = winner
-    winner_player.awards += 1 if winner_player
+    winner_player.awards += 1 if winner_player and winner_player.deaths == 0
 
     @players.each do |player|
       start_kills_date = nil
