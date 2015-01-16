@@ -1,5 +1,5 @@
 class Match
-  attr_reader :id, :created_at, :events, :players
+  attr_reader :id, :created_at, :events, :players, :player_rankings
 
   def initialize(id, created_at)
     @id = id
@@ -14,27 +14,6 @@ class Match
 
     event = Event.new(from_player, to_player, event[:weapon], event[:created_at])
     @events << event
-  end
-
-  def player_rankings
-    valid_players = @players.delete_if {|player| player.world? }
-    valid_players.sort_by { |player| player.kills }.reverse!
-  end
-
-  def winner
-    rankings = player_rankings
-    first = rankings.first
-    second = rankings.size > 1 ? rankings[1] : nil
-    
-    if second
-      return first.kills > second.kills ? first : nil
-    end
-
-    first
-  end
-
-  def winner_favorite_weapon
-    winner.favorite_weapon
   end
 
   private
