@@ -1,5 +1,6 @@
 class Player
   attr_reader :name, :events
+  attr_accessor :awards
 
   WORLD_NAME = "<WORLD>"
 
@@ -7,6 +8,7 @@ class Player
     @name = name
     @events = []
     @weapons = {}
+    @awards = 0
   end
 
   def add_event(event)

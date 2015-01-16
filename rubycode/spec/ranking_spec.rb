@@ -6,13 +6,13 @@ require "ranking"
 describe Ranking do
   before do
     @match = Match.new "1", Time.now
+    add_match_event(@match)
+    add_match_event(@match, to_player: "Nick", weapon: "USP")
+    add_match_event(@match, to_player: "Roman", weapon: "USP")
   end
 
   describe "#winner" do
     before do
-      add_match_event(@match)
-      add_match_event(@match, to_player: "Nick", weapon: "USP")
-      add_match_event(@match, to_player: "Roman", weapon: "USP")
       add_match_event(@match, from_player: "Roman", to_player: "verto", weapon: "USP")
     end
 
@@ -28,6 +28,18 @@ describe Ranking do
 
       rank = Ranking.new(@match)
       expect(rank.winner).to eq(nil)
+    end
+  end
+
+  describe "generate awards" do
+    it "should add award to winner without deaths" do
+      rank = Ranking.new(@match)
+      winner = rank.winner
+      expect(winner.awards).to eq(1)
+      expect(rank.players.last.awards).to eq(0)
+    end
+
+    it "should add award to player that kill more than 5x in one minute" do
     end
   end
 

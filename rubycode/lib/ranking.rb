@@ -4,6 +4,7 @@ class Ranking
   def initialize(match)
     @match = match
     generate_player_rankings(match)
+    generate_awards
   end
 
   def match_id
@@ -36,6 +37,11 @@ class Ranking
   end
 
   private
+
+  def generate_awards
+    winner_player = winner
+    winner_player.awards += 1 if winner_player
+  end
 
   def generate_player_rankings(match)
     valid_players = match.players.delete_if {|player| player.world? }
