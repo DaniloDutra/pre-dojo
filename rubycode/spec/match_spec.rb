@@ -45,6 +45,6 @@ describe Match do
   end
 
   def event(attrs = {})
-    { match: "1", from_player: "verto", to_player: "noob", weapon: "AWP" }.merge!(attrs)
+    { match: "1", from_player: "verto", to_player: "noob", weapon: "AWP", created_at: Time.now }.merge!(attrs)
   end
 end
