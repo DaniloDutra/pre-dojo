@@ -3,6 +3,10 @@ require "date_utils"
 class LogParser
   attr_reader :datatable, :lines, :logfile
 
+  STARTED_MATCH_REGEX = /^(\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}:\d{2}) - New match (\d+) has started$/
+  ENDED_MATCH_REGEX = /^(\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}:\d{2}) - Match (\d+) has ended$/
+  EVENT_MATCH_REGEX = /^(\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}:\d{2}) - (\S+) killed (\S+) (using|by) (\w+)$/
+
   def initialize(logfile = "#{File.dirname(__FILE__)}/../history.log")
     @logfile = logfile
     file = File.open(logfile, "r")
@@ -35,17 +39,17 @@ class LogParser
   private
 
   def started_match?(line)
-    m = /^(\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}:\d{2}) - New match (\d+) has started$/.match line
+    m = STARTED_MATCH_REGEX.match line
     m.nil? ? nil : { id: m[3], created_at: DateUtils.parse("#{m[1]} #{m[2]}") }
   end
 
   def ended_match?(line)
-    m = /^(\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}:\d{2}) - Match (\d+) has ended$/.match line
+    m = ENDED_MATCH_REGEX.match line
     m.nil? ? nil : { id: m[3], created_at: DateUtils.parse("#{m[1]} #{m[2]}") }
   end
 
   def match_event?(line)
-    m = /^(\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}:\d{2}) - (\S+) killed (\S+) (using|by) (\w+)$/.match line
+    m = EVENT_MATCH_REGEX.match line
     m.nil? ? nil : { from_player: m[3], to_player: m[4], weapon: m[5], created_at: DateUtils.parse("#{m[1]} #{m[2]}") }
   end
 
