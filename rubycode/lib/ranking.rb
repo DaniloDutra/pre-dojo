@@ -1,6 +1,9 @@
 class Ranking
   attr_reader :players
 
+  TOTAL_KILLS_TO_AWARDS = 5
+  MAX_SECONDS_TO_KILLS = 60
+
   def initialize(match)
     @match = match
     generate_player_rankings(match)
@@ -48,9 +51,9 @@ class Ranking
       player.events.each do |event|
         if event.from_player == player
           start_kills_date ||= event.created_at
-          total_kills += 1 if event.created_at <= (start_kills_date + 300)
+          total_kills += 1 if event.created_at <= (start_kills_date + MAX_SECONDS_TO_KILLS)
 
-          if total_kills == 5
+          if total_kills == TOTAL_KILLS_TO_AWARDS
             awards += 1
             # reset
             time_to_first_kill = nil
