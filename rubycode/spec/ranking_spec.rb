@@ -39,7 +39,22 @@ describe Ranking do
       expect(rank.players.last.awards).to eq(0)
     end
 
-    it "should add award to player that kill more than 5x in one minute" do
+    describe "generate awards by kills" do
+      before do
+        add_match_event(@match, to_player: "Nick", weapon: "AWP")
+      end
+
+      it "should add award to player that kill more than 5x in one minute" do
+        add_match_event(@match, to_player: "Nick", weapon: "AWP")
+        rank = Ranking.new(@match)
+        expect(rank.winner.awards).to eq(2)
+      end
+      
+      it "should not add award to player that kill 5x in more then one minute" do
+        add_match_event(@match, to_player: "Nick", weapon: "AWP", created_at: Time.now + 301)
+        rank = Ranking.new(@match)
+        expect(rank.winner.awards).to eq(1)
+      end
     end
   end
 

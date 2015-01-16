@@ -41,6 +41,30 @@ class Ranking
   def generate_awards
     winner_player = winner
     winner_player.awards += 1 if winner_player
+
+    @players.each do |player|
+      start_kills_date = nil
+      total_kills, awards = 0,0
+      player.events.each do |event|
+        if event.from_player == player
+          start_kills_date ||= event.created_at
+          total_kills += 1 if event.created_at <= (start_kills_date + 300)
+
+          if total_kills == 5
+            awards += 1
+            # reset
+            time_to_first_kill = nil
+            total_kills = 0
+          end
+        else
+          # reset
+          time_to_first_kill = nil
+          total_kills = 0
+        end
+      end
+
+      player.awards += awards
+    end
   end
 
   def generate_player_rankings(match)
