@@ -32,40 +32,6 @@ describe Ranking do
     end
   end
 
-  describe "generate awards" do
-    it "should add award to winner without deaths" do
-      rank = Ranking.new(@match)
-      winner = rank.winner
-      expect(winner.awards).to eq(1)
-      expect(rank.players.last.awards).to eq(0)
-    end
-
-    it "should not add awards to winner with death" do
-      add_match_event(@match, from_player: "Nick", to_player: "verto")
-      rank = Ranking.new(@match)
-      winner = rank.winner
-      expect(winner.awards).to eq(0)
-    end
-
-    describe "generate awards by kills" do
-      before do
-        add_match_event(@match, to_player: "Nick", weapon: "AWP")
-      end
-
-      it "should add award to player that kill more than 5x in one minute" do
-        add_match_event(@match, to_player: "Nick", weapon: "AWP", created_at: Time.now + 59)
-        rank = Ranking.new(@match)
-        expect(rank.winner.awards).to eq(2)
-      end
-      
-      it "should not add award to player that kill 5x in more then one minute" do
-        add_match_event(@match, to_player: "Nick", weapon: "AWP", created_at: Time.now + 60)
-        rank = Ranking.new(@match)
-        expect(rank.winner.awards).to eq(1)
-      end
-    end
-  end
-
   def add_match_event(match, attrs = {})
     match.add_event({ from_player: "verto", to_player: "noob", weapon: "AWP", created_at: Time.now }.merge!(attrs))
   end
