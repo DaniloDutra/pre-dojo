@@ -6,6 +6,7 @@ require 'player'
 require 'event'
 require 'log_parser'
 require 'matches'
+require 'awards'
 require 'ranking'
 
 ranks = Ranking.all

@@ -1,6 +1,7 @@
 require "match"
 require "player"
 require "event"
+require "awards"
 require "ranking"
 
 describe Ranking do
