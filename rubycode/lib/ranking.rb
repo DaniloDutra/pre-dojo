@@ -49,7 +49,7 @@ class Ranking
       start_kills_date = nil
       total_kills, awards = 0,0
       player.events.each do |event|
-        if event.from_player == player
+        if event.is_a_kill_of?(player)
           start_kills_date ||= event.created_at
           total_kills += 1 if event.created_at <= (start_kills_date + MAX_SECONDS_TO_KILLS)
 

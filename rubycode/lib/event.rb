@@ -10,4 +10,12 @@ class Event
     @to_player.add_event(self)
     @from_player.add_event(self)
   end
+
+  def is_a_kill_of?(player)
+    player == from_player
+  end
+
+  def is_a_death_of?(player)
+    player == to_player
+  end
 end

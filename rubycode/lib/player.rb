@@ -50,12 +50,12 @@ class Player
 
       streak = 0
       @events.each do |event|
-        if self == event.from_player
+        if event.is_a_kill_of?(self)
           @kills += 1
           streak += 1
           @weapons[event.weapon] ||= 0
           @weapons[event.weapon] += 1
-        elsif self == event.to_player
+        elsif event.is_a_death_of?(self)
           @deaths += 1
           update_killstreak streak
           streak = 0
@@ -71,4 +71,5 @@ class Player
   def update_killstreak(kills)
     @killstreak = kills if kills > @killstreak
   end
+
 end

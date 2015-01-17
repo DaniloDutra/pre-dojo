@@ -1,21 +1,33 @@
 require "player"
+require "event"
 
 describe Player do
   before do
-    @player = Player.new("Nick")
-    @player.add_event(event(from_player: @player))
-    @player.add_event(event(from_player: @player))
-    @player.add_event(event(to_player: @player))
+    @players = {}
+    @player = player("Nick")
+    event(from_player: @player)
+    event(from_player: @player)
+    event(to_player: @player)
   end
 
   def event(attrs={})
    current_attrs = {
-          from_player: double('player'),
-          to_player: double('player'),
+          from_player: player('player1'),
+          to_player: player('player2'),
           weapon: "AWP",
           created_at: Time.now }
 
-    double('event', current_attrs.merge!(attrs))
+   current_attrs = current_attrs.merge!(attrs)
+
+    Event.new current_attrs[:from_player],
+              current_attrs[:to_player],
+              current_attrs[:weapon],
+              current_attrs[:created_at]
+  end
+
+  def player(name)
+    @players[name] ||= Player.new(name)
+    @players[name]
   end
 
   it "should return totals of kills" do
@@ -29,16 +41,16 @@ describe Player do
   describe "#add_event" do
     it "should sort by created_at" do
       expected_created_at = Time.now - 60
-      @player.add_event(event(from_player: "LastUser", created_at: expected_created_at))
+      event(from_player: player("LastUser"), to_player: @player, created_at: expected_created_at)
       expect(@player.events.first.created_at).to eq(expected_created_at)
     end
   end
 
   describe "favorite weapon" do
     before do
-      @player.add_event(event(from_player: @player, weapon: "USP"))
-      @player.add_event(event(from_player: @player, weapon: "USP"))
-      @player.add_event(event(from_player: @player, weapon: "USP"))
+      event(from_player: @player, weapon: "USP")
+      event(from_player: @player, weapon: "USP")
+      event(from_player: @player, weapon: "USP")
     end
 
     it "should return favorite weapon" do
@@ -46,29 +58,29 @@ describe Player do
     end
 
     it "should return first favorite weapon if has more than one" do
-      @player.add_event(event(from_player: @player, weapon: "AWP"))
+      event(from_player: @player, weapon: "AWP")
       expect(@player.favorite_weapon).to eq("USP")
     end
   end
 
   describe "#killstreak" do
     before do
-      @player = Player.new("NickKiller")
+      @player = player("NickKiller")
     end
 
     it "should return better seq of kills" do
-      @player.add_event(event(from_player: @player))
-      @player.add_event(event(to_player: @player))
-      @player.add_event(event(from_player: @player))
-      @player.add_event(event(from_player: @player))
-      @player.add_event(event(from_player: @player))
-      @player.add_event(event(to_player: @player))
+      event(from_player: @player)
+      event(to_player: @player)
+      event(from_player: @player)
+      event(from_player: @player)
+      event(from_player: @player)
+      event(to_player: @player)
 
       expect(@player.killstreak).to eq(3)
     end
 
     it "should return 0 if haven't kills" do
-      @player.add_event(event(to_player: @player))
+      event(to_player: @player)
       expect(@player.killstreak).to eq(0)
     end
   end
