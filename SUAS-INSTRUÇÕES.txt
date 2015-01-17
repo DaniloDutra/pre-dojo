@@ -1,4 +1,22 @@
 Comandos para iniciar:
+
 $ cd rubycode
 $ bundle install
-$ ruby cli/rankings.rb
+$ ruby cli/display_rankings.rb
+
+ Algumas considerações sobre minhas decisões de design:
+
+# LogParser
+  Responsável pela implementação da interface do Parser que deve seguir o contrato com o metodo #datatable 
+  retornando uma estrutura com os objetos necessários para a construção dos domain models. Assim podemos 
+  implementar parsers para outras fontes de dados como: XMLParser, JSONParser, etc.
+  Basicamente o Parser#datatable deve retornar uma collection com a estrutura:
+  -------------------------------------------------------------------------------
+  | match_id | match_created_by | from_player | to_player | weapon | created_by |
+  -------------------------------------------------------------------------------
+  
+# Matches
+  Repositório de Match.
+
+# Ranking + Awards
+  Objetos que representa a logica com as condições especificas do desafio para cada Match.
